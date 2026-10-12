@@ -9,7 +9,8 @@ Updated 2026-10-12. Public repository: https://github.com/vishnu2006034/jobpilot
 | Manual jobs and matching | Implemented | 9 cumulative PostgreSQL tests passed, including matching fixtures, duplicate imports and ownership |
 | Manual application tracking | Implemented | 13 cumulative PostgreSQL tests passed, including concurrent updates, retry replay and immutable events |
 | React interface | Implemented | TypeScript/Vite build passed; 2 real Chrome acceptance tests passed; desktop/mobile screenshots inspected |
-| ATS discovery and durable scheduling | Deferred after first local slice | Not implemented |
+| Durable task/schedule framework | Implemented | 20 cumulative PostgreSQL tests passed, including concurrent claims, fenced leases, retries and schedule coalescing |
+| ATS discovery and source interface | In progress | Provider endpoints checked; ingestion not yet verified |
 | Resume import/tailoring | Deferred | Not implemented |
 | Gmail tracking | Deferred | Not implemented |
 | Browser submission | Deferred | Not implemented |
