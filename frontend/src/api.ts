@@ -59,6 +59,12 @@ export type Profile = {
   version: number;
 };
 export type Job = {
+  provenance: string;
+  source_details: {
+    provider?: string;
+    revision?: number;
+    retrieved_at?: string;
+  };
   id: string;
   company: string;
   title: string;

@@ -9,7 +9,7 @@ Planned stack: React/TypeScript, FastAPI and PostgreSQL in a modular monolith.
 
 First delivery: private local profile, manual jobs, deterministic matching and manual application timeline. Gmail integration and automated submission are later milestones.
 
-Implemented: account/session handling, profile editing, manual opportunity import/save, explainable eligibility and fit scores, application states and timelines, and a responsive React interface. No live discovery or external applications are performed.
+Implemented: account/session handling, profile editing, manual opportunities, explainable eligibility and fit scores, application timelines, and scheduled Greenhouse/Lever discovery with in-app alerts. No external applications are submitted.
 
 Never commit credentials, real resumes, email exports or browser sessions.
 
@@ -64,4 +64,20 @@ Browser checks create a separate temporary database and synthetic user, start te
 
 The build outputs static assets; a public production deployment still needs HTTPS, a reverse proxy for `/api`, database backup/restore, managed secrets and an operational review. Google Fonts is optional visual styling; system fonts provide a fallback when offline.
 
-Stop the API with Ctrl+C. From the repository root, stop only this project's database with `python scripts/local_database.py stop`.
+## Company discovery
+
+After upgrading migrations, run these in two additional terminals with the Python environment activated, each from `backend`:
+
+```powershell
+python -m app.worker worker
+```
+
+```powershell
+python -m app.worker scheduler
+```
+
+In Discovery, choose **Add suggested companies** to follow ten supported company boards, or add a Greenhouse/Lever board name. This is a starter list, not coverage of every MNC. Sources check every 15 minutes by default while both processes and PostgreSQL run. The first successful check establishes a baseline; later new relevant postings generate persistent in-app alerts. The open app checks for alerts every 15 seconds. This is not instant company push or closed-browser notification delivery.
+
+The shortlist targets SDE/data-analysis fresher or 2027 signals: Chennai on-site, India-compatible remote, and Bengaluru with an explicitly posted INR annual minimum of at least 800,000. Unknown pay, work location or eligibility stays in review. Text signals do not establish eligibility. See the [discovery contract](docs/discovery-contract.md) for supported sources and limitations.
+
+Stop the API, worker and scheduler with Ctrl+C. From the repository root, stop only this project's database with `python scripts/local_database.py stop`.

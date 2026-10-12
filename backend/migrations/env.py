@@ -7,6 +7,7 @@ from app import identity  # noqa: F401
 from app import jobs  # noqa: F401
 from app import applications  # noqa: F401
 from app import operations  # noqa: F401
+from app import discovery  # noqa: F401
 
 config = context.config
 

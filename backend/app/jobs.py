@@ -21,6 +21,7 @@ class Job(Identity, Base):
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
     source_url: Mapped[str] = mapped_column(String(2048))
     data: Mapped[dict] = mapped_column(JSONB)
+    provenance: Mapped[dict] = mapped_column(JSONB, default=lambda: {"kind": "manual"})
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, index=True)
 
 
@@ -47,7 +48,7 @@ class JobInput(BaseModel):
     company: str = Field(min_length=1, max_length=160)
     title: str = Field(min_length=1, max_length=200)
     source_url: HttpUrl = Field(max_length=2048)
-    location: str = Field(default="", max_length=160)
+    location: str = Field(default="", max_length=1000)
     remote: bool = False
     description: str = Field(default="", max_length=30000)
     required_skills: list[str] = Field(default_factory=list, max_length=100)
@@ -90,7 +91,8 @@ def owned_job(db, user_id, job_id):
 
 def serialize_job(db, job):
     return {"id": job.id, **job.data, "source_url": job.source_url, "created_at": job.created_at,
-            "saved": db.get(SavedJob, (job.user_id, job.id)) is not None, "provenance": "manual"}
+            "saved": db.get(SavedJob, (job.user_id, job.id)) is not None,
+            "provenance": job.provenance.get("kind", "manual"), "source_details": job.provenance}
 
 
 def calculate_match(profile, job, now=None):

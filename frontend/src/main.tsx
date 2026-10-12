@@ -13,6 +13,7 @@ import {
   type Summary,
 } from "./api";
 import "./style.css";
+import { DiscoveryAlerts, DiscoveryWorkspace } from "./Discovery";
 
 const split = (value: FormDataEntryValue | null) =>
   String(value || "")
@@ -257,6 +258,7 @@ function App() {
         <nav aria-label="Main navigation">
           {[
             ["jobs", "◈", "Opportunities"],
+            ["discovery", "⌁", "Discovery"],
             ["applications", "▤", "Applications"],
             ["profile", "◎", "My profile"],
           ].map(([id, icon, name]) => (
@@ -321,7 +323,9 @@ function App() {
               ? "Opportunities"
               : screen === "applications"
                 ? "Applications"
-                : "My profile"}
+                : screen === "discovery"
+                  ? "Discovery"
+                  : "My profile"}
           </span>
           <span className="local-status">
             <i /> Local workspace
@@ -355,21 +359,27 @@ function App() {
                   ? "FIND YOUR NEXT CHAPTER"
                   : screen === "applications"
                     ? "EVERY STEP, IN ONE PLACE"
-                    : "A PROFILE THAT SOUNDS LIKE YOU"}
+                    : screen === "discovery"
+                      ? "YOUR NEXT ROLE, ON THE RADAR"
+                      : "A PROFILE THAT SOUNDS LIKE YOU"}
               </p>
               <h1>
                 {screen === "jobs"
                   ? "Good things ahead."
                   : screen === "applications"
                     ? "Keep your momentum."
-                    : "Start with your strengths."}
+                    : screen === "discovery"
+                      ? "Stay close to what’s next."
+                      : "Start with your strengths."}
               </h1>
               <p className="muted">
                 {screen === "jobs"
                   ? "A considered shortlist. A clearer path to your next role."
                   : screen === "applications"
                     ? "Track the applications you make, and know what comes next."
-                    : "Your details power transparent, practical job matches."}
+                    : screen === "discovery"
+                      ? "Follow company boards and catch new roles that deserve a closer look."
+                      : "Your details power transparent, practical job matches."}
               </p>
             </div>
             {screen === "jobs" && (
@@ -387,6 +397,10 @@ function App() {
               {error}
             </div>
           )}
+          <DiscoveryAlerts
+            key={`alerts-${user.id}`}
+            onOpen={() => setScreen("discovery")}
+          />
           {notice && (
             <div className="notice" role="status">
               {notice}
@@ -410,6 +424,20 @@ function App() {
               </div>
             ))}
           </section>
+
+          {screen === "discovery" && (
+            <DiscoveryWorkspace
+              key={`discovery-${user.id}`}
+              onImport={async (job) => {
+                await refresh();
+                await selectJob(job);
+                setScreen("jobs");
+                setNotice(
+                  "Opened the saved opportunity. Review its requirements before relying on a match.",
+                );
+              }}
+            />
+          )}
 
           {screen === "jobs" && (
             <>
@@ -472,7 +500,11 @@ function App() {
                         <div className="job-main">
                           <div className="job-meta">
                             {job.company}
-                            <span>Manually added</span>
+                            <span>
+                              {job.provenance === "ats_snapshot"
+                                ? `${job.source_details.provider} snapshot`
+                                : "Manually added"}
+                            </span>
                           </div>
                           <button
                             className="job-title"
@@ -663,9 +695,8 @@ function App() {
                 </aside>
               </div>
               <div className="roadmap-note">
-                <span>ON THE HORIZON</span> Automated discovery, resume
-                tailoring, Gmail sync, and application submission are not
-                available in this version.
+                <span>ON THE HORIZON</span> Resume tailoring, Gmail sync, and
+                application submission are not available in this version.
               </div>
             </>
           )}

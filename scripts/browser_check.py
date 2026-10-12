@@ -31,7 +31,7 @@ def main():
         connection.execute(text(f'CREATE DATABASE "{name}"'))
     test_url = make_url(url).set(database=name).render_as_string(hide_password=False)
     engine, sessions = database(test_url)
-    process = None
+    process = worker = None
     private = ROOT / "private-data"
     private.mkdir(exist_ok=True)
     log = (private / "browser-api.log").open("w", encoding="utf-8")
@@ -66,9 +66,15 @@ def main():
             time.sleep(.5)
         else:
             raise RuntimeError("Timed out waiting for test API")
+        worker = subprocess.Popen([sys.executable, str(ROOT / "scripts" / "browser_worker_fixture.py")],
+                                  cwd=ROOT, env=env, stdout=log, stderr=log,
+                                  creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
         result = subprocess.run([shutil.which("npm") or "npm", "run", "test:e2e"], cwd=ROOT / "frontend", env=env)
         return result.returncode
     finally:
+        if worker:
+            worker.terminate()
+            worker.wait(timeout=15)
         if process:
             process.terminate()
             process.wait(timeout=15)
