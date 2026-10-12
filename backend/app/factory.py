@@ -6,6 +6,7 @@ from .config import Settings
 from .db import database
 from .identity import router
 from .jobs import router as jobs_router
+from .applications import router as applications_router
 
 
 def create_app(settings: Settings):
@@ -32,4 +33,5 @@ def create_app(settings: Settings):
 
     app.include_router(router)
     app.include_router(jobs_router)
+    app.include_router(applications_router)
     return app

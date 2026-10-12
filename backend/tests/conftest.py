@@ -46,8 +46,9 @@ def app():
 @pytest.fixture(autouse=True)
 def clean(app):
     with app.state.engine.begin() as connection:
-        for table in reversed(Base.metadata.sorted_tables):
-            connection.execute(table.delete())
+        # This engine points only at the freshly created random test database.
+        names = ", ".join('"' + table.name + '"' for table in Base.metadata.sorted_tables)
+        connection.execute(text(f"TRUNCATE {names} CASCADE"))
 
 
 @pytest.fixture

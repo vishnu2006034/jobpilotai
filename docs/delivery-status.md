@@ -7,7 +7,7 @@ Updated 2026-10-12. Public repository: https://github.com/vishnu2006034/jobpilot
 | Architecture review | Committed and pushed | Document checked against original proposal |
 | Foundation and identity | Implemented | 5 PostgreSQL tests passed; one dependency deprecation warning |
 | Manual jobs and matching | Implemented | 9 cumulative PostgreSQL tests passed, including matching fixtures, duplicate imports and ownership |
-| Manual application tracking | Planned | Not tested |
+| Manual application tracking | Implemented | 13 cumulative PostgreSQL tests passed, including concurrent updates, retry replay and immutable events |
 | React interface | Planned | Not tested |
 | ATS discovery and durable scheduling | Deferred after first local slice | Not implemented |
 | Resume import/tailoring | Deferred | Not implemented |
