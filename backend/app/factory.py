@@ -5,6 +5,7 @@ from sqlalchemy import text
 from .config import Settings
 from .db import database
 from .identity import router
+from .jobs import router as jobs_router
 
 
 def create_app(settings: Settings):
@@ -30,4 +31,5 @@ def create_app(settings: Settings):
         return {"status": "ok", "version": "0.1.0"}
 
     app.include_router(router)
+    app.include_router(jobs_router)
     return app
