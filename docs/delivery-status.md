@@ -18,4 +18,6 @@ No deployment or production-readiness claim. Public source does not expose the l
 
 Latest local verification: **14 backend tests passed on PostgreSQL 18**, including persistence through a fresh API instance; **2 Chrome browser tests passed**; TypeScript and the production frontend build passed. The backend suite has one upstream Starlette/AnyIO deprecation warning. The browser test data is synthetic and its database is removed after each run.
 
-GitHub Actions passed for the foundation (`cf19a7e`), jobs (`158039f`) and applications (`63cb400`) commits. The frontend commit adds build and browser acceptance to CI; its remote result must be checked separately after pushing.
+GitHub Actions passed for the foundation (`cf19a7e`), jobs (`158039f`) and applications (`63cb400`) commits. The frontend commit `0c4fcf0` also passed [the full CI verification](https://github.com/vishnu2006034/jobpilotai/actions/runs/38226180989): PostgreSQL tests, clean npm install, TypeScript/production build and Chromium browser acceptance. This records evidence for that implementation commit, not an unverified future revision.
+
+The first local MVP milestone is complete. The original full architecture acceptance criteria are **not** complete: two-source discovery, durable scheduling, resume import, Gmail suggestions and approved submissions remain future modules. Setup instructions are in the README. Create your own account through the local CLI; no shared/default login is included.
