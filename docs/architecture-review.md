@@ -54,4 +54,4 @@ Later milestones additionally require source replay/failure tests, lease and sta
 
 Use this folder as the monorepo. Keep the supplied architecture as the original proposal and record implementation decisions in docs. Commit coherent features with relevant tests; use PRs and CI when a remote is connected. Keep real resumes, mail, tokens, secrets and browser profiles out of Git. Default a new remote to private unless the owner requests public visibility.
 
-Current status: local repository initialized. Remote creation/push requires authenticated GitHub access and an owner/repository destination. No remote repository, deployment, running application or passing application tests are claimed by this review.
+Status at the time of the original review: local repository initialized; implementation and remote setup had not started. Subsequent delivery is recorded in [delivery-status.md](delivery-status.md). The user subsequently authorized a public repository and module-by-module pushes.
