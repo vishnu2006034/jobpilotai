@@ -14,6 +14,7 @@ import {
 } from "./api";
 import "./style.css";
 import { DiscoveryAlerts, DiscoveryWorkspace } from "./Discovery";
+import { ResumeWorkspace } from "./Resumes";
 
 const split = (value: FormDataEntryValue | null) =>
   String(value || "")
@@ -261,6 +262,7 @@ function App() {
             ["discovery", "⌁", "Discovery"],
             ["applications", "▤", "Applications"],
             ["profile", "◎", "My profile"],
+            ["resumes", "▧", "Resumes"],
           ].map(([id, icon, name]) => (
             <button
               key={id}
@@ -325,7 +327,9 @@ function App() {
                 ? "Applications"
                 : screen === "discovery"
                   ? "Discovery"
-                  : "My profile"}
+                  : screen === "resumes"
+                    ? "Resumes"
+                    : "My profile"}
           </span>
           <span className="local-status">
             <i /> Local workspace
@@ -361,7 +365,9 @@ function App() {
                     ? "EVERY STEP, IN ONE PLACE"
                     : screen === "discovery"
                       ? "YOUR NEXT ROLE, ON THE RADAR"
-                      : "A PROFILE THAT SOUNDS LIKE YOU"}
+                      : screen === "resumes"
+                        ? "YOUR EXPERIENCE, IN YOUR WORDS"
+                        : "A PROFILE THAT SOUNDS LIKE YOU"}
               </p>
               <h1>
                 {screen === "jobs"
@@ -370,7 +376,9 @@ function App() {
                     ? "Keep your momentum."
                     : screen === "discovery"
                       ? "Stay close to what’s next."
-                      : "Start with your strengths."}
+                      : screen === "resumes"
+                        ? "Make your experience count."
+                        : "Start with your strengths."}
               </h1>
               <p className="muted">
                 {screen === "jobs"
@@ -379,7 +387,9 @@ function App() {
                     ? "Track the applications you make, and know what comes next."
                     : screen === "discovery"
                       ? "Follow company boards and catch new roles that deserve a closer look."
-                      : "Your details power transparent, practical job matches."}
+                      : screen === "resumes"
+                        ? "Prepare a focused draft from facts you have reviewed."
+                        : "Your details power transparent, practical job matches."}
               </p>
             </div>
             {screen === "jobs" && (
@@ -425,6 +435,9 @@ function App() {
             ))}
           </section>
 
+          {screen === "resumes" && (
+            <ResumeWorkspace key={`resumes-${user.id}`} />
+          )}
           {screen === "discovery" && (
             <DiscoveryWorkspace
               key={`discovery-${user.id}`}

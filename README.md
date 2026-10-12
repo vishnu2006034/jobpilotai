@@ -9,7 +9,7 @@ Planned stack: React/TypeScript, FastAPI and PostgreSQL in a modular monolith.
 
 First delivery: private local profile, manual jobs, deterministic matching and manual application timeline. Gmail integration and automated submission are later milestones.
 
-Implemented: account/session handling, profile editing, manual opportunities, explainable eligibility and fit scores, application timelines, and scheduled Greenhouse/Lever discovery with in-app alerts. No external applications are submitted.
+Implemented: account/session handling, profile editing, manual opportunities, explainable eligibility and fit scores, application timelines, scheduled Greenhouse/Lever discovery with in-app alerts, and reviewed text resumes/drafts. No external applications are submitted.
 
 Never commit credentials, real resumes, email exports or browser sessions.
 
@@ -63,6 +63,10 @@ python scripts/browser_check.py
 Browser checks create a separate temporary database and synthetic user, start temporary API/frontend servers on ports 8001/5183, and clean up afterward. Windows uses installed Google Chrome if available; otherwise run `npx playwright install chromium` from frontend first. Screenshots and temporary credentials remain under ignored `private-data`; credentials are removed when the run finishes. The screenshot data is explicitly synthetic.
 
 The build outputs static assets; a public production deployment still needs HTTPS, a reverse proxy for `/api`, database backup/restore, managed secrets and an operational review. Google Fonts is optional visual styling; system fonts provide a fallback when offline.
+
+## Resume preparation
+
+After upgrading migrations, open **Resumes**. Paste text or read a UTF-8 `.txt` file, then save and review the version. Select a target opportunity and the source paragraphs to retain. Create a focused draft, review its exact preview, then download the text. Each changed version or draft is saved separately. No personal resume is bundled or committed. PDF/DOCX import and AI rewriting remain pending; see the [resume contract](docs/resume-contract.md).
 
 ## Company discovery
 

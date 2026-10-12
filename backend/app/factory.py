@@ -9,6 +9,7 @@ from .jobs import router as jobs_router
 from .applications import router as applications_router
 from .operations import router as operations_router
 from .discovery import router as discovery_router
+from .resumes import router as resumes_router
 
 
 def create_app(settings: Settings):
@@ -38,4 +39,5 @@ def create_app(settings: Settings):
     app.include_router(applications_router)
     app.include_router(operations_router)
     app.include_router(discovery_router)
+    app.include_router(resumes_router)
     return app
