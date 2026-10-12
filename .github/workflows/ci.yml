@@ -1,0 +1,30 @@
+name: Verify modules
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: jobpilot
+          POSTGRES_PASSWORD: ci-only-password
+          POSTGRES_DB: jobpilot
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U jobpilot"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      TEST_DATABASE_URL: postgresql+psycopg://jobpilot:ci-only-password@localhost:5432/postgres
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install -r requirements.txt
+      - run: python -m pytest -q

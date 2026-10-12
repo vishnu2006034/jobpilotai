@@ -1,6 +1,6 @@
 # JobPilot
 
-Personal job discovery and application tracking project. Current stage: architecture review; application implementation has not started.
+Personal job discovery and application tracking project. Modules are developed and pushed incrementally. See [delivery status](docs/delivery-status.md) for verified progress and limitations.
 
 - [Original architecture proposal](JobPilot_Architecture.md)
 - [Architecture flaws, delivery estimates and acceptance plan](docs/architecture-review.md)
@@ -9,4 +9,34 @@ Planned stack: React/TypeScript, FastAPI and PostgreSQL in a modular monolith.
 
 First delivery: private local profile, manual jobs, deterministic matching and manual application timeline. Gmail integration and automated submission are later milestones.
 
-Never commit credentials, real resumes, email exports or browser sessions. Setup and test commands will be added with working implementation.
+Never commit credentials, real resumes, email exports or browser sessions.
+
+## Backend setup (PowerShell)
+
+Requires Python 3.13 and PostgreSQL 18. Run these from the repository root:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r backend/requirements.txt
+python scripts/local_database.py start
+python -m alembic -c backend/alembic.ini upgrade head
+Set-Location backend
+python -m app.manage create-user --email you@example.com
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+```
+
+The database helper creates a separate project-owned cluster on port 55439 and writes random credentials to ignored `.env`. It does not modify existing PostgreSQL services. Set `POSTGRES_BIN` if binaries are elsewhere. Alternatively copy `.env.example` to `.env` and supply an existing PostgreSQL database; do not run the cluster helper in that case. Migrations are explicit, never run on API startup. API documentation: `http://127.0.0.1:8000/docs`.
+
+Create-user prompts for a password without placing it in command history. There is no public registration. API mutations require `X-JobPilot: 1`; browser requests must originate from `APP_ORIGIN`. Sessions use HttpOnly, SameSite=Strict cookies. Local HTTP uses `COOKIE_SECURE=false`; an HTTPS deployment must set it to true and use an exact HTTPS origin. This is a local application, not a production deployment recipe.
+
+## Verification
+
+```powershell
+Set-Location backend
+python -m pytest -q
+```
+
+Tests require `TEST_DATABASE_URL` with CREATEDB permission. They create and remove random `jobpilot_test_*` databases; they do not truncate the configured application database. CI uses PostgreSQL 18 as well.
+
+Stop the API with Ctrl+C. From the repository root, stop only this project's database with `python scripts/local_database.py stop`.
